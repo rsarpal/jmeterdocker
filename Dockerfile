@@ -13,6 +13,8 @@ ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
 RUN apt-get update && \
     apt-get -y install \
     wget
+    
+RUN apt-get -y install telegraf
 
 # INSTALL JMETER BASE
 RUN mkdir /jmeter
