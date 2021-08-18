@@ -45,6 +45,7 @@ RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-graphs-additi
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-fifo/0.2/jmeter-plugins-fifo-0.2.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-fifo-0.2.jar
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-tst/2.5/jmeter-plugins-tst-2.5.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-tst-2.5.jar
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-perfmon/2.1/jmeter-plugins-perfmon-2.1.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-perfmon-2.1.jar
+RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-table-server/2.4/jmeter-plugins-table-server-2.4.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-table-server-2.4.jar
 
 
 
