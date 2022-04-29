@@ -1,4 +1,4 @@
-FROM openjdk:15-jre-slim
+FROM adoptopenjdk/openjdk15:centos-jre
 ARG JMETER_VERSION
 ARG JMETER_PLUGIN_VERSION="1.4.0"
 
@@ -10,8 +10,8 @@ ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
 
 
 # INSTALL PRE-REQ
-RUN apt-get update && \
-    apt-get -y install \
+RUN yum update && \
+    yum -y install \
     wget
     
 #RUN apt-get -y install telegraf
@@ -34,8 +34,8 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-$JMETER_V
     #unzip -o JMeterPlugins-ExtrasLibs-1.4.0.zip -d /$JMETER_PLUGINS_FOLDER/apache-jmeter-$JMETER_VERSION
 
 
-RUN apt-get update \
-    && apt-get install -y curl
+RUN yum update \
+    && yum install -y curl
 
 #RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-dummy/0.2/jmeter-plugins-dummy-0.2.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-dummy-0.2.jar
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-standard/${JMETER_PLUGIN_VERSION}/jmeter-plugins-standard-${JMETER_PLUGIN_VERSION}.jar   -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-standard-${JMETER_PLUGIN_VERSION}.jar
