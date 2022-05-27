@@ -1,0 +1,39 @@
+version: '3'
+services:
+  jmetergenerator:
+    build: generator
+    image: rsarpal/jmetergenerator:v5.1
+    networks:
+      - jmeter
+    #    ipv4_address: 10.5.0.5
+    ports:
+      # bind container ports to localhost
+      # Port server.rmi.port
+      - '1099'
+      # Port for server.rmi.localport  
+      - '26000'
+    
+    volumes:
+      # mount volues to preserve data on Docker stop/restart
+      - jmetergenerator-storage:/usr/data
+  jmetercontroller:
+    build: controller
+    image: rsarpal/jmeterclient:v5.1
+    networks:
+      - jmeter
+    ports:
+      # bind container ports to localhost
+      #Port for client.rmi.localport
+      - '25000'
+    volumes:
+      # mount volues to preserve data on Docker stop/restart
+      - /Users/admin/IdeaProjects/Jmeter:/usr/data
+
+volumes:
+  jmetergenerator-storage:
+
+networks:
+  jmeter:
+      driver: bridge
+      name: jmeter_network
+

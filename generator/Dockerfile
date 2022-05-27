@@ -1,20 +1,27 @@
-FROM openjdk:8-jre-slim
+#Bulding JmeterServer or Slave or GENERATOR
+FROM adoptopenjdk/openjdk15:centos-jre
 ARG JMETER_VERSION
 ARG JMETER_PLUGIN_VERSION="1.4.0"
 
-ENV JMETER_VERSION ${JMETER_VERSION:-5.3}
+ENV JMETER_VERSION ${JMETER_VERSION:-5.1.1}
 ENV JMETER_HOME /jmeter/apache-jmeter-$JMETER_VERSION/
 ENV PATH $JMETER_HOME/bin:$PATH
 ENV JMETER_PLUGINS_DOWNLOAD_URL https://repo1.maven.org/maven2/kg/apc
 ENV JMETER_PLUGINS_FOLDER ${JMETER_HOME}/lib/ext/
 
+#Setup Telegraf installation repo path
+#COPY influxdb.repo /etc/yum.repos.d/
 
 # INSTALL PRE-REQ
-RUN apt-get update && \
-    apt-get -y install \
-    wget
+RUN yum update && \
+    yum -y install \
+    wget telegraf curl
+
+#Install Just
+RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/just
+ENV PATH="/usr/local/just:${PATH}" 
     
-RUN apt-get -y install telegraf
+#RUN apt-get -y install telegraf
 
 # INSTALL JMETER BASE
 RUN mkdir /jmeter
@@ -34,8 +41,6 @@ RUN wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-$JMETER_V
     #unzip -o JMeterPlugins-ExtrasLibs-1.4.0.zip -d /$JMETER_PLUGINS_FOLDER/apache-jmeter-$JMETER_VERSION
 
 
-RUN apt-get update \
-    && apt-get install -y curl
 
 #RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-dummy/0.2/jmeter-plugins-dummy-0.2.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-dummy-0.2.jar
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-standard/${JMETER_PLUGIN_VERSION}/jmeter-plugins-standard-${JMETER_PLUGIN_VERSION}.jar   -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-standard-${JMETER_PLUGIN_VERSION}.jar
@@ -53,12 +58,15 @@ RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-table-server/
 
 
 WORKDIR $JMETER_HOME
+COPY jmeter.properties $JMETER_HOME/bin
 
-COPY jmeterStartup.sh /jmeter/jmeterStartup.sh
+WORKDIR /jmeter
+
+COPY jmeterStartup.sh jmeterStartup.sh
 
 # setup executable permission to docker
-RUN chmod +x /jmeter/jmeterStartup.sh
+RUN chmod +x jmeterStartup.sh
 
-
+# expose server.rmi.localport  & server.rmi.port
 EXPOSE 1099 26000
 ENTRYPOINT ["/jmeter/jmeterStartup.sh"]

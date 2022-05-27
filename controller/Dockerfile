@@ -1,3 +1,4 @@
+#Bulding Jmeterclient or Controller
 FROM adoptopenjdk/openjdk15:centos-jre
 ARG JMETER_VERSION
 ARG JMETER_PLUGIN_VERSION="1.4.0"
@@ -55,15 +56,12 @@ RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-perfmon/2.1/j
 RUN curl -L --silent ${JMETER_PLUGINS_DOWNLOAD_URL}/jmeter-plugins-table-server/2.4/jmeter-plugins-table-server-2.4.jar -o ${JMETER_PLUGINS_FOLDER}/jmeter-plugins-table-server-2.4.jar
 
 
+COPY jmeter.properties $JMETER_HOME/bin
+
 RUN mkdir /usr/data
 
 WORKDIR $ACTIVEDIR
 
-#COPY jmeterStartup.sh /jmeter/jmeterStartup.sh
+#expose RMI client.rmi.localport
+EXPOSE 25000
 
-# setup executable permission to docker
-#RUN chmod +x /jmeter/jmeterStartup.sh
-
-
-EXPOSE 1099 26000
-#ENTRYPOINT ["/jmeter/jmeterStartup.sh"]

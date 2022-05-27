@@ -15,4 +15,4 @@ echo "JVM_ARGS=${JVM_ARGS}"
 $JMETER_HOME/bin/jmeter-server \
     -Dserver.rmi.ssl.disable=true \
     -Dserver.rmi.localport=26000 \
-    -Dserver_port=1099 &
+    -Dserver_port=1099
